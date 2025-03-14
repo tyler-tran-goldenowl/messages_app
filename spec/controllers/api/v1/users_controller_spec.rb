@@ -9,8 +9,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
             first_name: 'John',
             last_name: 'Doe',
             birthdate: '1990-01-01',
-            location: 'New York',
-            timezone: 'America/New_York'
+            location: 'New York'
           }
         }
       end

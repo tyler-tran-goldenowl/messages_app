@@ -2,13 +2,13 @@
 :scheduler:
   :schedule:
     birthday_checker:
-      cron: "0 * * * *"  # Run every hour
-      class: "BirthdayCheckJob"
-      queue: "default"
-      description: "Check for users who have birthdays and enqueue message sender jobs"
+      cron: 0 * * * * # Run every hour
+      class: BirthdayCheckJob
+      queue: default
+      description: Check for users who have birthdays and enqueue message sender jobs
 
     send_pending_messages:
-      cron: "0 0 * * *"  # Run once per day at midnight
-      class: "SendPendingMessagesJob"
-      queue: "default"
-      description: "Send any pending messages"
+      cron: 0 0 * * * # Run once per day at midnight
+      class: SendPendingMessagesJob
+      queue: default
+      description: Send any pending messages

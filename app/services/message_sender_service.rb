@@ -2,9 +2,6 @@ require 'json'
 require 'net/http'
 
 class MessageSenderService
-  # Constants
-  HOOKBIN_ENDPOINT = ENV.fetch('HOOKBIN_ENDPOINT', 'https://eotx9la2xahfru6.m.pipedream.net')
-
   attr_reader :message
 
   def initialize(message)
@@ -14,7 +11,6 @@ class MessageSenderService
   def send_message
     return if message.sent_at.present?
 
-    # Dispatch to appropriate sender method based on message type
     case message.message_type.to_sym
     when :birthday
       send_birthday_message
@@ -27,7 +23,7 @@ class MessageSenderService
   private
 
   def send_birthday_message
-    uri = URI('https://eotx9la2xahfru6.m.pipedream.net')
+    uri = URI(ENV['HOOKBIN_ENDPOINT'])
     req = Net::HTTP::Post.new(uri, 'Content-Type' => 'application/json')
 
     req.body = {
@@ -37,5 +33,10 @@ class MessageSenderService
     Net::HTTP.start(uri.hostname, uri.port, :use_ssl => uri.scheme == 'https') do |http|
       http.request(req)
     end
+
+    message.mark_sent!
+  rescue => e
+    Rails.logger.error("Error sending message: #{e.message}")
+    false
   end
 end
